@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -22,26 +23,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugas7.R
 import com.example.tugas7.model.DetailSiswa
+import com.example.tugas7.model.EntityViewModel
 import com.example.tugas7.model.PenyediaViewModel
 import com.example.tugas7.model.UIStateSiswa
 import com.example.tugas7.navigasi.DestinasiNavigasi
 import com.example.tugas7.navigasi.SiswaTopAppBar
+import kotlinx.coroutines.launch
 
 object DestinasiEntry: DestinasiNavigasi {
     override  val route ="item_entry"
     override val titleRes = R.string.entry_siswa
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntrySiswaScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: EntryViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    viewModel: EntityViewModel= viewModel(factory = PenyediaViewModel.Factory)
 
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -59,9 +61,9 @@ fun EntrySiswaScreen(
             uiStateSiswa = viewModel.uiStateSiswa,
             onSiswaValueChange = viewModel::updateUiState,
             onSaveClick = {
-                coroutineScope.Launch {
+                coroutineScope.launch {
                     viewModel.saveSiswa()
-                    navigasiBack()
+                    navigateBack()
                 }
             },
             modifier = Modifier
@@ -85,7 +87,7 @@ fun EntrySiswaBody(
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium))
     ){
         FormInputSiswa(
-            detailSiswa = UIStateSiswa.detailSiswa,
+            detailSiswa = uiStateSiswa.detailSiswa,
             onValueChange = onSiswaValueChange,
             modifier=Modifier.fillMaxWidth()
         )
@@ -135,6 +137,16 @@ fun FormInputSiswa(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
+        )
+if(enabled) {
+    Text(
+        text = stringResource(id = R.string.required_field),
+        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_medium))
+    )
+ }
+        Divider (
+            thickness = dimensionResource(id = R.dimen.padding_small),
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_medium))
         )
 
     }
