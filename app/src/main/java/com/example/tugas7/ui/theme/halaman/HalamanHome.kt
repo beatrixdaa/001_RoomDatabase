@@ -80,7 +80,7 @@ fun HomeScreen (
             itemSiswa = uiStateSiswa.listSiswa,
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxWidth()
+                .fillMaxWidth(0
         )
     }
 }
