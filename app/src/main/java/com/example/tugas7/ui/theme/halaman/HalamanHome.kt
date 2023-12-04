@@ -76,7 +76,7 @@ fun HomeScreen (
             }
         },
     ) {
-        innerPadding ->
+        innerPadding  ->
         val uiStateSiswa by viewModel.homeUiState.collectAsState()
         BodyHome (
             itemSiswa = uiStateSiswa.listSiswa,

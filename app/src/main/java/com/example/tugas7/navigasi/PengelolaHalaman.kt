@@ -13,8 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.tugas7.R
+import com.example.tugas7.ui.theme.halaman.DestinasiEntry
+import com.example.tugas7.ui.theme.halaman.DestinasiHome
+import com.example.tugas7.ui.theme.halaman.EntrySiswaScreen
+import com.example.tugas7.ui.theme.halaman.HomeScreen
 
 
 @Composable
@@ -55,7 +60,19 @@ scrollBehavior=scrollBehavior,
 
 @Composable
 fun HostNavigasi(navController: NavController,
-                 modifier: Modifier =Modifier) {
+                 modifier: Modifier =Modifier
+) {
 
+
+    NavHost(navController=navController,startDestination = DestinasiHome.route, modifier=Modifier){
+        composable(DestinasiHome.route){
+            HomeScreen(
+                navigateToItemEntry = {navController.navigate(DestinasiEntry.route)},
+            )
+        }
+        composable(DestinasiEntry.route){
+            EntrySiswaScreen(navigasiBack = {navController.popBackStack()})
+        }
+    }
 }
 
