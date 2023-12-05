@@ -1,6 +1,5 @@
 package com.example.tugas7.navigasi
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -12,8 +11,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tugas7.R
 import com.example.tugas7.ui.theme.halaman.DestinasiEntry
@@ -23,7 +23,7 @@ import com.example.tugas7.ui.theme.halaman.HomeScreen
 
 
 @Composable
-fun SiswaApp(navController: NavController=rememberNavController()){
+fun SiswaApp(navController: NavHostController = rememberNavController()){
     HostNavigasi(navController=navController)
 }
 
@@ -31,17 +31,17 @@ fun SiswaApp(navController: NavController=rememberNavController()){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SiswaTopAppBar(
-title:String,
-canNavController: Boolean,
-modifier: Modifier = Modifier,
-scrollBehavior: TopAppBarScrollBehavior? = null,
-navigateUp:() -> Unit = {}
+    title:String,
+    canNavigateBack: Boolean,
+    modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    navigateUp:() -> Unit = {}
 ){
     CenterAlignedTopAppBar(title =  { Text(title) },
- modifier = modifier,
-scrollBehavior=scrollBehavior,
+        modifier = modifier,
+        scrollBehavior=scrollBehavior,
         navigationIcon = {
-            if (canNavController) {
+            if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -51,27 +51,29 @@ scrollBehavior=scrollBehavior,
             }
         })
 
-
-
 }
 
 
 
 
 @Composable
-fun HostNavigasi(navController: NavController,
-                 modifier: Modifier =Modifier
+fun HostNavigasi(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
-
-
-    NavHost(navController=navController,startDestination = DestinasiHome.route, modifier=Modifier){
-        composable(DestinasiHome.route){
+    NavHost(
+        navController = navController,
+        startDestination = DestinasiHome.route,
+        modifier = Modifier
+    )
+    {
+        composable(DestinasiHome.route) {
             HomeScreen(
-                navigateToItemEntry = {navController.navigate(DestinasiEntry.route)},
+                navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
             )
         }
-        composable(DestinasiEntry.route){
-            EntrySiswaScreen(navigasiBack = {navController.popBackStack()})
+        composable(DestinasiEntry.route) {
+            EntrySiswaScreen(navigateBack = { navController.popBackStack() })
         }
     }
 }
